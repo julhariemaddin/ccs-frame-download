@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { buildFrameGeometry } from '../lib/frameGeometry';
-import { FONT_STACKS } from '../lib/adminStore';
+import { FONT_STACKS, ensureFrameAnchor } from '../lib/adminStore';
 
 const SIZE = 1254;
 const BASE = import.meta.env.BASE_URL;
@@ -36,9 +36,25 @@ export default function FramePreviewEditor({ frame, layout, onChange }) {
     img.src = frame.isCustom ? frame.file : `${BASE}${frame.categoryKey}/${frame.file}`;
   }, [frame]);
 
-  const anchor = geometry?.nameplate
-    ? { x: geometry.nameplate.x + geometry.nameplate.w / 2, y: geometry.nameplate.y + geometry.nameplate.h / 2 - 10 }
-    : { x: SIZE / 2, y: SIZE - 170 };
+  // Freeze this frame's anchor the first time it's previewed, same as the
+  // main generator does, so the admin drags against the exact same static
+  // point the real output uses (instead of a fresh detection each visit).
+  useEffect(() => {
+    if (!geometry) return;
+    const detected = geometry.nameplate
+      ? { x: geometry.nameplate.x + geometry.nameplate.w / 2, y: geometry.nameplate.y + geometry.nameplate.h / 2 - 10 }
+      : { x: SIZE / 2, y: SIZE - 170 };
+    const frozen = ensureFrameAnchor(frame.categoryKey, frame.id, detected);
+    if (layout.anchorX == null || layout.anchorY == null) {
+      onChange({ anchorX: frozen.anchorX, anchorY: frozen.anchorY });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [geometry, frame]);
+
+  const anchor =
+    layout.anchorX != null && layout.anchorY != null
+      ? { x: layout.anchorX, y: layout.anchorY }
+      : { x: SIZE / 2, y: SIZE - 170 };
 
   // redraw the canvas whenever anything relevant changes
   useEffect(() => {

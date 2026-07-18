@@ -7,10 +7,14 @@ import {
   deleteFrame,
   setFrameLayout,
   getFrameLayout,
+  getCategoryLayoutMap,
+  downloadCategoryLayout,
+  getPublishToken,
   DEFAULT_LAYOUT,
   currentAcademicYear,
   logout,
 } from '../lib/adminStore';
+import { publishLiveLayouts } from '../lib/liveLayouts';
 import { loadFileCategories } from '../lib/frameManifest';
 import FramePreviewEditor from './FramePreviewEditor';
 
@@ -212,7 +216,9 @@ export default function AdminDashboard({ onSignOut }) {
 
       {activeFrame && (
         <LayoutEditor
+          key={`${activeCategory}:${activeFrame.id}`}
           categoryKey={activeCategory}
+          folder={fileCategories[activeCategory]?.folder || store.categories[activeCategory]?.folder || activeCategory}
           frame={activeFrame}
           onSaved={() => setNotice(`Layout saved for "${activeFrame.label}".`)}
         />
@@ -285,17 +291,36 @@ function FramesEditor({
   );
 }
 
-function LayoutEditor({ categoryKey, frame, onSaved }) {
+function LayoutEditor({ categoryKey, folder, frame, onSaved }) {
   const [layout, setLayout] = useState(() => getFrameLayout(categoryKey, frame.id));
+  const [publishState, setPublishState] = useState('idle'); // idle | publishing | done | error
+  const [publishError, setPublishError] = useState('');
 
   function update(field, value) {
     setLayout((l) => ({ ...l, [field]: value }));
   }
 
-  function handleSave(e) {
+  // One button, one action: save it for real. Writes the local draft AND
+  // publishes it live in the same click — no separate "publish" step.
+  async function handleSave(e) {
     e.preventDefault();
     setFrameLayout(categoryKey, frame.id, layout);
-    onSaved();
+    setPublishState('publishing');
+    setPublishError('');
+    try {
+      const fullMap = getCategoryLayoutMap(categoryKey);
+      await publishLiveLayouts(folder, fullMap, getPublishToken());
+      setPublishState('done');
+      onSaved();
+    } catch (err) {
+      setPublishState('error');
+      setPublishError(err.message);
+    }
+  }
+
+  function handleBackupDownload() {
+    setFrameLayout(categoryKey, frame.id, layout);
+    downloadCategoryLayout(categoryKey, folder);
   }
 
   function handleResetDefaults() {
@@ -403,18 +428,30 @@ function LayoutEditor({ categoryKey, frame, onSaved }) {
         </fieldset>
 
         <div className="admin__layout-actions">
-          <button type="submit" className="btn btn--primary">
-            Save layout
+          <button type="submit" className="btn btn--primary" disabled={publishState === 'publishing'}>
+            {publishState === 'publishing' ? 'Saving…' : 'Save position'}
           </button>
           <button type="button" className="btn btn--ghost" onClick={handleResetDefaults}>
             Reset to defaults
           </button>
+          <button type="button" className="btn btn--ghost" onClick={handleBackupDownload}>
+            Download backup copy
+          </button>
         </div>
+        {publishState === 'done' && (
+          <p className="admin__hint" style={{ color: '#2a7a3b' }}>
+            ✓ Saved. Everyone sees this now.
+          </p>
+        )}
+        {publishState === 'error' && (
+          <p className="admin__hint" style={{ color: '#b3261e' }}>
+            ✗ Didn't save: {publishError}
+          </p>
+        )}
       </form>
       <p className="admin__hint">
-        Drag the boxes above, or fine-tune with exact numbers below. Offsets are relative to the
-        frame's auto-detected nameplate center. Users can still nudge their name in the generator.
-        This just sets where it starts.
+        Drag the boxes above, or fine-tune with exact numbers below, then click{' '}
+        <strong>Save position</strong>. That's it — one click, live for everyone immediately.
       </p>
     </section>
   );

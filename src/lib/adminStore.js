@@ -34,6 +34,11 @@ export const DEFAULT_LAYOUT = {
   programSize: 22,
   programOffsetX: 0,
   programOffsetY: 36,
+  // The anchor point name/program offsets are measured from. Frozen once
+  // per frame (see ensureFrameAnchor) so the text position never shifts
+  // due to re-running the nameplate auto-detector on later loads.
+  anchorX: null,
+  anchorY: null,
 };
 
 export const FONT_STACKS = {
@@ -146,8 +151,78 @@ export function getFrameLayout(categoryId, frameId) {
   return store.frameLayouts[`${categoryId}:${frameId}`] || { ...DEFAULT_LAYOUT };
 }
 
+// Freezes the anchor point (nameplate center) for a frame the first time
+// it's seen, so later loads reuse that exact point instead of re-running
+// the pixel-scan detector (which can land slightly differently frame to
+// frame if the nameplate isn't perfectly clean white). Once anchorX/Y is
+// set, this is a no-op — call resetFrameAnchor() to force a re-detect.
+export function ensureFrameAnchor(categoryId, frameId, detectedAnchor) {
+  const store = readStore();
+  const key = `${categoryId}:${frameId}`;
+  const existing = store.frameLayouts[key];
+  if (existing && existing.anchorX != null && existing.anchorY != null) {
+    return existing; // already frozen — leave it alone
+  }
+  const layout = { ...DEFAULT_LAYOUT, ...existing, anchorX: detectedAnchor.x, anchorY: detectedAnchor.y };
+  store.frameLayouts[key] = layout;
+  writeStore(store);
+  return layout;
+}
+
+// Lets the admin re-run auto-detection for a frame (e.g. after replacing
+// the PNG) by clearing the frozen anchor.
+export function resetFrameAnchor(categoryId, frameId) {
+  const store = readStore();
+  const key = `${categoryId}:${frameId}`;
+  if (store.frameLayouts[key]) {
+    store.frameLayouts[key].anchorX = null;
+    store.frameLayouts[key].anchorY = null;
+    writeStore(store);
+  }
+  return store.frameLayouts[key];
+}
+
 export function resetAllAdminData() {
   writeStore(emptyStore());
+}
+
+// ---------- publishing to the live server (see api/layout.js) ----------
+// Builds a plain { [frameId]: layout } map for one category — exactly
+// the shape /api/layout.js stores and serves to every visitor.
+export function getCategoryLayoutMap(categoryId) {
+  const store = readStore();
+  const prefix = `${categoryId}:`;
+  const out = {};
+  Object.entries(store.frameLayouts).forEach(([key, layout]) => {
+    if (key.startsWith(prefix)) {
+      out[key.slice(prefix.length)] = layout;
+    }
+  });
+  return out;
+}
+
+export function exportCategoryLayoutJSON(categoryId) {
+  return JSON.stringify(getCategoryLayoutMap(categoryId), null, 2);
+}
+
+// Optional local backup download — not required for publishing anymore
+// (use the "Publish live" button for that), but handy as a safety copy.
+export function downloadCategoryLayout(categoryId, folder) {
+  const json = exportCategoryLayoutJSON(categoryId);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${folder || categoryId}-layout-backup.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// The token /api/layout.js checks on publish requests. Same as the admin
+// login password unless a stronger ADMIN_PUBLISH_TOKEN is set on Vercel
+// (see api/layout.js) — kept as one constant so the two never drift.
+export function getPublishToken() {
+  return ADMIN_PASSWORD;
 }
 
 // ---------- academic year ----------

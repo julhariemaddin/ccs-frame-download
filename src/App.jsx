@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { getMergedCategories } from './lib/mergedCategories';
 import { loadList } from './lib/parseList';
 import { buildFrameGeometry } from './lib/frameGeometry';
-import { getFrameLayout, DEFAULT_LAYOUT, FONT_STACKS, currentAcademicYear } from './lib/adminStore';
+import { DEFAULT_LAYOUT, FONT_STACKS, currentAcademicYear } from './lib/adminStore';
+import { loadLiveLayouts, getLiveFrameLayout } from './lib/liveLayouts';
 import LoadingScreen from './components/LoadingScreen';
 import Welcome from './components/Welcome';
 import StepProgress from './components/StepProgress';
@@ -71,12 +72,27 @@ export default function App() {
     setError('');
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.onload = () => {
+    img.onload = async () => {
       const geo = buildFrameGeometry(img, SIZE);
       setFrameImg(img);
       setGeometry(geo);
       setSelectedFrame(frame);
-      setLayout(getFrameLayout(frame.categoryKey, frame.id));
+
+      // Precedence: (1) live layout from the server (/api/layout) — the
+      // real, shared-by-everyone position, published by the admin;
+      // (2) a fresh live detection as a last resort for brand-new frames
+      // nobody has positioned yet.
+      const liveLayouts = await loadLiveLayouts(frame.categoryKey);
+      const fromServer = getLiveFrameLayout(liveLayouts, frame.id);
+      if (fromServer) {
+        setLayout({ ...DEFAULT_LAYOUT, ...fromServer });
+      } else {
+        const detected = geo.nameplate
+          ? { x: geo.nameplate.x + geo.nameplate.w / 2, y: geo.nameplate.y + geo.nameplate.h / 2 - 10 }
+          : { x: SIZE / 2, y: SIZE - 170 };
+        setLayout({ ...DEFAULT_LAYOUT, anchorX: detected.x, anchorY: detected.y });
+      }
+
       setPhotoImg((prevPhoto) => {
         if (prevPhoto) {
           const fill = Math.max(geo.hole.w / prevPhoto.width, geo.hole.h / prevPhoto.height);

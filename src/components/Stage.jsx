@@ -68,17 +68,22 @@ export default function Stage({
     ctx.restore();
   }, [name, program, textState, layout]);
 
-  // reposition text anchor whenever geometry (or the frame's default layout) changes
+  // reposition text anchor whenever geometry (or the frame's default layout) changes.
+  // Prefer the frame's frozen anchor (layout.anchorX/Y, set once by App.jsx via
+  // ensureFrameAnchor) so the position is truly static per frame. Only fall back
+  // to live nameplate detection if a frame has never been anchored before.
   useEffect(() => {
     if (!geometry) return;
-    if (geometry.nameplate) {
+    if (layout.anchorX != null && layout.anchorY != null) {
+      setTextState({ x: layout.anchorX, y: layout.anchorY });
+    } else if (geometry.nameplate) {
       setTextState({
         x: geometry.nameplate.x + geometry.nameplate.w / 2,
         y: geometry.nameplate.y + geometry.nameplate.h / 2 - 10,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [geometry, setTextState]);
+  }, [geometry, layout.anchorX, layout.anchorY, setTextState]);
 
   function getCanvasCoords(e) {
     const rect = stageRef.current.getBoundingClientRect();
