@@ -273,7 +273,9 @@
   border: 1.5px solid var(--line-strong);
   background: var(--paper-0);
   color: var(--ink-950);
-  color-scheme: light;
+  color-scheme: light only;
+  -webkit-appearance: none;
+  appearance: none;
   font-size: 0.98rem;
   font-family: var(--font-body);
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -284,7 +286,16 @@
   border-color: var(--navy-600);
   box-shadow: 0 0 0 3px var(--navy-100);
 }
-.field select option { background: var(--paper-0); }
+.field select option { background: var(--paper-0); color: var(--ink-950); }
+
+.field input[type='text']:-webkit-autofill,
+.field input[type='text']:-webkit-autofill:hover,
+.field input[type='text']:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink-950);
+  -webkit-box-shadow: 0 0 0 1000px var(--paper-0) inset;
+  box-shadow: 0 0 0 1000px var(--paper-0) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
 
 /* ==================================================================
    Category — tile grid (not a numbered contact sheet)
