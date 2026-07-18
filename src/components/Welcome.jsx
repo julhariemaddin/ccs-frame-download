@@ -21,7 +21,7 @@ export default function Welcome({ onStart }) {
 <p className="welcome__lede">
   Designed and developed by CCS students, Frame Lab lets you personalize your
   official CCS profile frame in minutes. Add your name and program, upload your
-  photo, and download a high-quality PNG—no third-party apps, no complicated
+  photo, and download a high-quality PNG no third-party apps, no complicated
   steps, just a tool built by CCS, for the CCS community.
 </p>
 
