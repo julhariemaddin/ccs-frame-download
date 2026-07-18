@@ -7,25 +7,33 @@ export default function Welcome({ onStart }) {
     <div className="welcome">
       <div className="welcome__card">
         <div className="welcome__logos">
-          <img src={`${BASE}branding/jrmsu-logo.png`} alt="JRMSU seal" />
-          <img src={`${BASE}branding/ccs-logo.png`} alt="College of Computer Studies logo" />
+          <img src={`${BASE}jrmsu-logo.png`} alt="JRMSU seal" />
+          <img src={`${BASE}ccs-logo.png`} alt="College of Computing Studies logo" />
         </div>
-        <p className="welcome__eyebrow">JRMSU · College of Computer Studies</p>
-        <h1 className="welcome__title">Frame Lab</h1>
-        <p className="welcome__lede">
-          Pick a frame, add your name and program, drop in a photo, and walk away with a
-          ready-to-print PNG — four short steps, no software to install.
-        </p>
+        <p className="welcome__eyebrow">
+  JRMSU · College of Computing Studies
+</p>
 
-        <ul className="welcome__points">
-          <li>Official CCS frame designs, updated every term</li>
-          <li>Quick photo filters so your shot looks its best</li>
-          <li>Share your finished frame straight from your phone</li>
-        </ul>
+<h1 className="welcome__title">
+  Frame Lab
+</h1>
 
-        <button className="btn btn--primary btn--lg" onClick={onStart}>
-          Get started
-        </button>
+<p className="welcome__lede">
+  Designed and developed by CCS students, Frame Lab lets you personalize your
+  official CCS profile frame in minutes. Add your name and program, upload your
+  photo, and download a high-quality PNG—no third-party apps, no complicated
+  steps, just a tool built by CCS, for the CCS community.
+</p>
+
+<ul className="welcome__points">
+  <li>Official College of Computing Studies frame designs</li>
+  <li>Fully customizable with your name, program, and photo</li>
+  <li>Instant high-quality PNG download, ready to share</li>
+</ul>
+
+<button className="btn btn--primary btn--lg" onClick={onStart}>
+  Create My Frame
+</button>
       </div>
 
       <Footer />

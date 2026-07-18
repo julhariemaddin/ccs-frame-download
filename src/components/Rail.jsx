@@ -6,12 +6,8 @@ export default function Rail({ step, showSteps, academicYear }) {
   return (
     <aside className="rail">
       <div className="rail__brand">
-        <img className="rail__logo" src={`${BASE}branding/jrmsu-logo.png`} alt="JRMSU seal" />
-        <img className="rail__logo" src={`${BASE}branding/ccs-logo.png`} alt="College of Computer Studies logo" />
-        <div className="rail__brand-text">
-          <p className="rail__uni">JRMSU</p>
-          <p className="rail__dept">College of Computer Studies</p>
-        </div>
+        <img className="rail__logo" src={`${BASE}jrmsu-logo.png`} alt="JRMSU seal" />
+        <p className="rail__wordmark">JRMSU-CCS</p>
       </div>
 
       <div className="rail__product">

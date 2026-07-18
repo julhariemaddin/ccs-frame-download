@@ -60,27 +60,20 @@
   height: 100vh;
   overflow-y: auto;
 }
-.rail__brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rail__brand { display: flex; align-items: center; gap: 12px; }
 .rail__logo {
   flex: 0 0 auto;
   height: 40px;
   width: auto;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
-.rail__brand-text { min-width: 0; }
-.rail__uni {
+.rail__wordmark {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
   color: var(--paper-0);
-}
-.rail__dept {
-  margin: 2px 0 0;
-  font-size: 0.72rem;
-  color: var(--gold-400);
-  line-height: 1.3;
 }
 .rail__product {
   display: flex;
@@ -280,6 +273,7 @@
   border: 1.5px solid var(--line-strong);
   background: var(--paper-0);
   color: var(--ink-950);
+  color-scheme: light;
   font-size: 0.98rem;
   font-family: var(--font-body);
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
@@ -766,7 +760,6 @@
   }
   .rail__brand { flex: 1 1 auto; gap: 8px; }
   .rail__logo { height: 28px; }
-  .rail__dept { display: none; }
   .rail__product { display: none; }
   .rail__nav { flex: 0 0 auto; }
   .rail__spacer { display: none; }
