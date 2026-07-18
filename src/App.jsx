@@ -229,7 +229,7 @@ export default function App() {
   function handleDownload() {
     const dataUrl = renderOutput();
     const safeName = name.trim().replace(/\s+/g, '_') || 'frame';
-    const fileName = `${safeName}_JRMSU_SC_CCS.png`;
+    const fileName = `${safeName}_JRMSU_CCS.png`;
     setOutputDataUrl(dataUrl);
     setOutputFileName(fileName);
     triggerDownload(dataUrl, fileName);
