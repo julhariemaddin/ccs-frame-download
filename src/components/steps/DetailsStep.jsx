@@ -9,6 +9,7 @@ export default function DetailsStep({
   allowFreeTextProgram,
   onPhotoFile,
   hasPhoto,
+  photoPreviewUrl,
   onBack,
   onNext,
 }) {
@@ -23,69 +24,85 @@ export default function DetailsStep({
   const canProceed = name.trim() && program.trim() && hasPhoto;
 
   return (
-    <div className="wizard-step">
-      <h2 className="wizard-step__title">Your details</h2>
-      <p className="wizard-step__hint">This prints on the frame exactly as you type it.</p>
-
-      <label className="field">
-        <span className="field__label mono">name</span>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Full name as it should print"
-          autoFocus
-        />
-      </label>
-
-      <label className="field">
-        <span className="field__label mono">program</span>
-        {allowFreeTextProgram || programOptions.length === 0 ? (
-          <input
-            type="text"
-            value={program}
-            onChange={(e) => setProgram(e.target.value)}
-            placeholder="Type your program / section"
-          />
-        ) : (
-          <select value={program} onChange={(e) => setProgram(e.target.value)}>
-            <option value="">Select your program</option>
-            {programOptions.map((p) => (
-              <option key={p.full} value={p.full}>
-                {p.code === p.full ? p.full : `${p.full} (${p.code})`}
-              </option>
-            ))}
-          </select>
-        )}
-      </label>
-
-      <span className="field__label mono">photo</span>
-      <div
-        className="dropzone"
-        onClick={() => fileInputRef.current.click()}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.currentTarget.classList.add('is-over');
-        }}
-        onDragLeave={(e) => e.currentTarget.classList.remove('is-over')}
-        onDrop={handleDrop}
-      >
-        <span className="mono">{hasPhoto ? '✓ photo added — tap to replace' : 'drop a photo, or tap to browse'}</span>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={(e) => e.target.files[0] && onPhotoFile(e.target.files[0])}
-        />
+    <div className="step">
+      <div className="step-head">
+        <h1>Your details</h1>
+        <p>This prints on the frame exactly as you type it.</p>
       </div>
 
-      <div className="wizard-step__actions">
-        <button className="btn btn--ghost" onClick={onBack}>
+      <div className="details-grid">
+        <div className="details-grid__form">
+          <label className="field">
+            <span className="field__label">Full name</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Juan Dela Cruz"
+              autoFocus
+            />
+          </label>
+
+          <label className="field">
+            <span className="field__label">Program</span>
+            {allowFreeTextProgram || programOptions.length === 0 ? (
+              <input
+                type="text"
+                value={program}
+                onChange={(e) => setProgram(e.target.value)}
+                placeholder="e.g. BS Computer Science"
+              />
+            ) : (
+              <select value={program} onChange={(e) => setProgram(e.target.value)}>
+                <option value="">Select your program</option>
+                {programOptions.map((p) => (
+                  <option key={p.full} value={p.full}>
+                    {p.code === p.full ? p.full : `${p.full} (${p.code})`}
+                  </option>
+                ))}
+              </select>
+            )}
+          </label>
+        </div>
+
+        <div className="details-grid__photo">
+          <span className="field__label">Photo</span>
+          <div
+            className={`dropzone ${hasPhoto ? 'has-photo' : ''}`}
+            onClick={() => fileInputRef.current.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.currentTarget.classList.add('is-over');
+            }}
+            onDragLeave={(e) => e.currentTarget.classList.remove('is-over')}
+            onDrop={handleDrop}
+          >
+            {hasPhoto && photoPreviewUrl ? (
+              <img className="dropzone__preview" src={photoPreviewUrl} alt="Your selected photo" />
+            ) : (
+              <>
+                <span className="dropzone__icon" aria-hidden="true">+</span>
+                <span>Drop a photo, or tap to browse</span>
+              </>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={(e) => e.target.files[0] && onPhotoFile(e.target.files[0])}
+            />
+          </div>
+          {hasPhoto && <p className="dropzone__hint">Tap the photo to replace it.</p>}
+        </div>
+      </div>
+
+      <div className="step-actions">
+        <button className="btn btn--secondary" onClick={onBack}>
           Back
         </button>
         <button className="btn btn--primary" disabled={!canProceed} onClick={onNext}>
-          Next: adjust &amp; download
+          Next
         </button>
       </div>
     </div>

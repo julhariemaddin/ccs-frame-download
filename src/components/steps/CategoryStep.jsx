@@ -2,25 +2,27 @@ export default function CategoryStep({ categories, category, setCategory, onNext
   const entries = Object.entries(categories);
 
   return (
-    <div className="wizard-step">
-      <h2 className="wizard-step__title">What's this frame for?</h2>
-      <p className="wizard-step__hint">Choose a category to see the frames inside it.</p>
+    <div className="step">
+      <div className="step-head">
+        <h1>What's this frame for?</h1>
+        <p>Choose a category to see the frames inside it.</p>
+      </div>
 
       {error && <div className="banner banner--error">{error}</div>}
 
       {entries.length === 0 ? (
-        <p className="hint">No categories yet. Ask an admin to add one.</p>
+        <p className="hint">No categories yet — ask a CCS officer to add one.</p>
       ) : (
-        <div className="category-grid">
+        <div className="tile-grid">
           {entries.map(([key, cfg]) => (
             <button
               key={key}
-              className={`category-card ${category === key ? 'is-selected' : ''}`}
+              className={`tile ${category === key ? 'is-selected' : ''}`}
               onClick={() => setCategory(key)}
               type="button"
             >
-              <span className="category-card__label">{cfg.label}</span>
-              <span className="mono category-card__count">
+              <span className="tile__label">{cfg.label}</span>
+              <span className="tile__count">
                 {cfg.frames.length} frame{cfg.frames.length === 1 ? '' : 's'}
               </span>
             </button>
@@ -28,9 +30,9 @@ export default function CategoryStep({ categories, category, setCategory, onNext
         </div>
       )}
 
-      <div className="wizard-step__actions">
+      <div className="step-actions">
         <button className="btn btn--primary" disabled={!category} onClick={onNext}>
-          Next: choose a frame
+          Next
         </button>
       </div>
     </div>

@@ -19,7 +19,7 @@ export default function AdminLogin({ onSuccess }) {
   return (
     <div className="admin-login">
       <form className="admin-login__card" onSubmit={handleSubmit}>
-        <p className="mono admin-login__eyebrow">jrmsu · frame lab admin</p>
+        <p className="mono admin-login__eyebrow">JRMSU · CCS Frame Lab — Admin</p>
         <h1 className="admin-login__title">Admin sign in</h1>
         <p className="admin-login__subtitle">Admin access only.</p>
 

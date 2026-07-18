@@ -5,8 +5,8 @@
   --admin-line: rgba(214, 85, 59, 0.25);
   --admin-line-soft: rgba(214, 85, 59, 0.18);
   --admin-text: #f5f0e4;
-  --admin-accent: var(--flash-500);
-  --admin-accent-strong: var(--flash-400);
+  --admin-accent: var(--gold-500);
+  --admin-accent-strong: var(--gold-400);
 }
 
 /* ---------- shared ---------- */

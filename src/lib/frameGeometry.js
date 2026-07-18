@@ -23,6 +23,8 @@
  * ------------------------------------------------------------------
  */
 
+import { getFilterCss } from './filters';
+
 const NAMEPLATE_SCAN_START_RATIO = 0.75; // only look for the plate in the bottom 25% of the canvas
 
 export function buildFrameGeometry(img, size = 1254) {
@@ -97,6 +99,7 @@ export function drawPhotoIntoHole(ctx, geometry, photoImg, photoState) {
   if (!photoImg) return;
 
   ctx.save();
+  ctx.filter = getFilterCss(photoState.filter);
   ctx.translate(photoState.x, photoState.y);
   ctx.rotate((photoState.rotation * Math.PI) / 180);
   const s = photoState.baseScale * photoState.scale;

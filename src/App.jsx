@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { getMergedCategories } from './lib/mergedCategories';
 import { loadList } from './lib/parseList';
-import { buildFrameGeometry } from './lib/frameGeometry';
+import { buildFrameGeometry, drawPhotoIntoHole } from './lib/frameGeometry';
 import { DEFAULT_LAYOUT, FONT_STACKS, currentAcademicYear } from './lib/adminStore';
 import { loadLiveLayouts, getLiveFrameLayout } from './lib/liveLayouts';
 import LoadingScreen from './components/LoadingScreen';
 import Welcome from './components/Welcome';
-import StepProgress from './components/StepProgress';
+import Rail from './components/Rail';
 import CategoryStep from './components/steps/CategoryStep';
 import FrameStep from './components/steps/FrameStep';
 import DetailsStep from './components/steps/DetailsStep';
@@ -18,6 +18,7 @@ const SIZE = 1254;
 const BASE = import.meta.env.BASE_URL;
 const WELCOME_KEY = 'jrmsu_welcomed_v1'; // sessionStorage: shown once per browser session
 const MIN_LOADING_MS = 900;
+const DEFAULT_PHOTO_STATE = { x: SIZE / 2, y: SIZE / 2, scale: 1, rotation: 0, baseScale: 1, filter: 'none' };
 
 export default function App() {
   // 'loading' -> 'welcome' (first visit this session only) -> 'category' ->
@@ -36,7 +37,7 @@ export default function App() {
   const [program, setProgram] = useState('');
 
   const [photoImg, setPhotoImg] = useState(null);
-  const [photoState, setPhotoState] = useState({ x: SIZE / 2, y: SIZE / 2, scale: 1, rotation: 0, baseScale: 1 });
+  const [photoState, setPhotoState] = useState(DEFAULT_PHOTO_STATE);
   const [textState, setTextState] = useState({ x: SIZE / 2, y: SIZE - 170 });
   const [layout, setLayout] = useState(DEFAULT_LAYOUT);
 
@@ -96,13 +97,14 @@ export default function App() {
       setPhotoImg((prevPhoto) => {
         if (prevPhoto) {
           const fill = Math.max(geo.hole.w / prevPhoto.width, geo.hole.h / prevPhoto.height);
-          setPhotoState({
+          setPhotoState((s) => ({
+            ...s,
             x: geo.hole.x + geo.hole.w / 2,
             y: geo.hole.y + geo.hole.h / 2,
             scale: 1,
             rotation: 0,
             baseScale: fill,
-          });
+          }));
         }
         return prevPhoto;
       });
@@ -152,13 +154,14 @@ export default function App() {
       img.onload = () => {
         const fill = Math.max(geometry.hole.w / img.width, geometry.hole.h / img.height);
         setPhotoImg(img);
-        setPhotoState({
+        setPhotoState((s) => ({
+          ...s,
           x: geometry.hole.x + geometry.hole.w / 2,
           y: geometry.hole.y + geometry.hole.h / 2,
           scale: 1,
           rotation: 0,
           baseScale: fill,
-        });
+        }));
       };
       img.src = ev.target.result;
     };
@@ -170,6 +173,9 @@ export default function App() {
   }
   function setRotation(v) {
     setPhotoState((s) => ({ ...s, rotation: v }));
+  }
+  function setFilter(id) {
+    setPhotoState((s) => ({ ...s, filter: id }));
   }
 
   function renderOutput() {
@@ -183,16 +189,7 @@ export default function App() {
       photoLayer.width = SIZE;
       photoLayer.height = SIZE;
       const pctx = photoLayer.getContext('2d');
-      if (photoImg) {
-        pctx.save();
-        pctx.translate(photoState.x, photoState.y);
-        pctx.rotate((photoState.rotation * Math.PI) / 180);
-        const s = photoState.baseScale * photoState.scale;
-        pctx.drawImage(photoImg, (-photoImg.width * s) / 2, (-photoImg.height * s) / 2, photoImg.width * s, photoImg.height * s);
-        pctx.restore();
-        pctx.globalCompositeOperation = 'destination-in';
-        pctx.drawImage(geometry.maskCanvas, 0, 0);
-      }
+      drawPhotoIntoHole(pctx, geometry, photoImg, photoState);
       octx.drawImage(photoLayer, 0, 0);
     }
     if (frameImg) octx.drawImage(frameImg, 0, 0, SIZE, SIZE);
@@ -229,7 +226,7 @@ export default function App() {
   function handleDownload() {
     const dataUrl = renderOutput();
     const safeName = name.trim().replace(/\s+/g, '_') || 'frame';
-    const fileName = `${safeName}_JRMSU_Frame.png`;
+    const fileName = `${safeName}_JRMSU_CCS_Frame.png`;
     setOutputDataUrl(dataUrl);
     setOutputFileName(fileName);
     triggerDownload(dataUrl, fileName);
@@ -244,7 +241,7 @@ export default function App() {
     setName('');
     setProgram('');
     setPhotoImg(null);
-    setPhotoState({ x: SIZE / 2, y: SIZE / 2, scale: 1, rotation: 0, baseScale: 1 });
+    setPhotoState(DEFAULT_PHOTO_STATE);
     setSelectedFrame(null);
     setFrameImg(null);
     setGeometry(null);
@@ -259,96 +256,89 @@ export default function App() {
   }
 
   const showStepProgress = ['category', 'frame', 'details', 'adjust'].includes(step);
+  const isBleedScreen = step === 'loading' || step === 'welcome';
 
   return (
-    <div className="app">
-      {step !== 'loading' && step !== 'welcome' && (
-        <header className="app__header">
-          <p className="mono app__eyebrow">jrmsu · frame lab</p>
-          <h1 className="app__title">Frame Generator</h1>
-          <span className="mono app__ay">{currentAcademicYear()}</span>
-          {showStepProgress && <StepProgress step={step} />}
-        </header>
-      )}
+    <div className={`app ${isBleedScreen ? 'app--bleed' : ''}`}>
+      {step === 'loading' && <LoadingScreen />}
+      {step === 'welcome' && <Welcome onStart={handleStart} />}
 
-      <main className="app__main app__main--wizard">
-        {step === 'loading' && <LoadingScreen />}
+      {!isBleedScreen && (
+        <div className="shell">
+          <Rail step={step} showSteps={showStepProgress} academicYear={currentAcademicYear()} />
 
-        {step === 'welcome' && <Welcome onStart={handleStart} />}
+          <main className="shell__main">
+            {step === 'category' && (
+              <CategoryStep
+                categories={categories}
+                category={category}
+                setCategory={setCategory}
+                onNext={() => setStep('frame')}
+                error={error}
+              />
+            )}
 
-        {step === 'category' && (
-          <CategoryStep
-            categories={categories}
-            category={category}
-            setCategory={setCategory}
-            onNext={() => setStep('frame')}
-            error={error}
-          />
-        )}
+            {step === 'frame' && (
+              <FrameStep
+                frames={config.frames.map((f) => ({ ...f, folder: config.folder }))}
+                selectedFrameId={selectedFrame?.id}
+                onSelectFrame={handleSelectFrame}
+                categoryLabel={config.label}
+                onBack={() => setStep('category')}
+                onNext={() => setStep('details')}
+              />
+            )}
 
-        {step === 'frame' && (
-          <FrameStep
-            frames={config.frames.map((f) => ({ ...f, folder: config.folder }))}
-            selectedFrameId={selectedFrame?.id}
-            onSelectFrame={handleSelectFrame}
-            categoryLabel={config.label}
-            onBack={() => setStep('category')}
-            onNext={() => setStep('details')}
-          />
-        )}
+            {step === 'details' && (
+              <DetailsStep
+                name={name}
+                setName={setName}
+                program={program}
+                setProgram={setProgram}
+                programOptions={programOptions}
+                allowFreeTextProgram={!config.listFile}
+                onPhotoFile={handlePhotoFile}
+                hasPhoto={!!photoImg}
+                photoPreviewUrl={photoImg?.src || null}
+                onBack={() => setStep('frame')}
+                onNext={() => setStep('adjust')}
+              />
+            )}
 
-        {step === 'details' && (
-          <DetailsStep
-            name={name}
-            setName={setName}
-            program={program}
-            setProgram={setProgram}
-            programOptions={programOptions}
-            allowFreeTextProgram={!config.listFile}
-            onPhotoFile={handlePhotoFile}
-            hasPhoto={!!photoImg}
-            onBack={() => setStep('frame')}
-            onNext={() => setStep('adjust')}
-          />
-        )}
+            {step === 'adjust' && (
+              <AdjustStep
+                frameImg={frameImg}
+                geometry={geometry}
+                photoImg={photoImg}
+                photoState={photoState}
+                setPhotoState={setPhotoState}
+                textState={textState}
+                setTextState={setTextState}
+                name={name}
+                program={program}
+                layout={layout}
+                zoom={Math.round(photoState.scale * 100)}
+                setZoom={setZoom}
+                rotation={photoState.rotation}
+                setRotation={setRotation}
+                filter={photoState.filter}
+                setFilter={setFilter}
+                onBack={() => setStep('details')}
+                onDownload={handleDownload}
+                error={error}
+              />
+            )}
 
-        {step === 'adjust' && (
-          <AdjustStep
-            frameImg={frameImg}
-            geometry={geometry}
-            photoImg={photoImg}
-            photoState={photoState}
-            setPhotoState={setPhotoState}
-            textState={textState}
-            setTextState={setTextState}
-            name={name}
-            program={program}
-            layout={layout}
-            zoom={Math.round(photoState.scale * 100)}
-            setZoom={setZoom}
-            rotation={photoState.rotation}
-            setRotation={setRotation}
-            onBack={() => setStep('details')}
-            onDownload={handleDownload}
-            error={error}
-          />
-        )}
-
-        {step === 'done' && (
-          <SuccessStep
-            outputDataUrl={outputDataUrl}
-            fileName={outputFileName}
-            onDownloadAgain={handleDownloadAgain}
-            onCreateAnother={handleCreateAnother}
-          />
-        )}
-      </main>
-
-      {step !== 'loading' && step !== 'welcome' && (
-        <footer className="app__footer mono">
-          <span>made for jrmsu students</span>
-          <span className="app__ack">Created by Julharie Maddin-Gov and the Frame Lab crew</span>
-        </footer>
+            {step === 'done' && (
+              <SuccessStep
+                outputDataUrl={outputDataUrl}
+                fileName={outputFileName}
+                onDownloadAgain={handleDownloadAgain}
+                onCreateAnother={handleCreateAnother}
+              />
+            )}
+          </main>
+        </div>
       )}
     </div>
   );

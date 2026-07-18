@@ -1,58 +1,63 @@
 /* ------------------------------------------------------------------
-   Design tokens — "Frame Lab" system
+   Design tokens — "CCS Frame Lab"
 
-   Concept: this app develops a printed photo, so the palette is a
-   darkroom's: warm paper stock, near-black pine ink, and a single
-   safelight-red accent — the actual red glow a darkroom is lit with
-   while prints come up, used here only for the one active thing on
-   screen (a selection, a live action).
+   Palette is JRMSU's own colors — navy blue and gold — not an
+   invented mood-board. Navy carries the structure (rail, headers,
+   primary actions); gold is the single accent used for the active
+   step, selection states, and focus rings so it stays meaningful
+   instead of decorative.
 
-   Type: Space Grotesk (display — geometric, a little technical, fits
-   a CS-department tool) + Inter (body) + JetBrains Mono (frame
-   counters, filenames, anything "read out" like a camera's meta).
+   Type: Space Grotesk (display) + Inter (body) + JetBrains Mono
+   (counters, filenames, code-like labels).
 ------------------------------------------------------------------- */
 :root {
-  /* ink (deep pine, not navy/black) */
-  --ink-950: #141f1b;
-  --ink-800: #223229;
-  --ink-700: #33473c;
-  --ink-600: #52685c;
-  --ink-400: #869184;
-  --ink-200: #c3c7ba;
+  /* navy — JRMSU blue */
+  --navy-950: #071022;
+  --navy-900: #0b1a34;
+  --navy-800: #12294c;
+  --navy-700: #1b3a68;
+  --navy-600: #274d87;
+  --navy-500: #3a63a4;
+  --navy-100: #e7edf8;
 
-  /* paper (warm print stock) */
-  --paper-0: #fdfbf6;
-  --paper-1: #f5f0e4;
-  --paper-2: #ece3d0;
-  --line: #ded2b6;
-  --line-strong: #cbba93;
+  /* gold — JRMSU gold, the one accent */
+  --gold-700: #7c5a12;
+  --gold-600: #a67a1e;
+  --gold-500: #c99a2e;
+  --gold-400: #ddb655;
+  --gold-100: #faf1d9;
 
-  /* safelight red — the one accent */
-  --flash-800: #7c2c1d;
-  --flash-600: #c2412b;
-  --flash-500: #d6553b;
-  --flash-400: #e17a5f;
-  --flash-100: #fbe4dc;
+  /* neutrals */
+  --paper-0: #ffffff;
+  --paper-1: #f5f7fb;
+  --paper-2: #eaeef6;
+  --line: #dde3f0;
+  --line-strong: #becbe0;
+
+  --ink-950: #0c1524;
+  --ink-800: #1b2740;
+  --ink-600: #4c5872;
+  --ink-400: #8792a8;
 
   /* signal */
-  --ok: #3d6b45;
-  --ok-bg: #e9f2ea;
-  --error-bg: #fbeae6;
-  --error-fg: #8a2f1a;
-  --error-border: #e8bfae;
+  --ok: #1c7a4d;
+  --ok-bg: #e8f6ee;
+  --error-bg: #fdecea;
+  --error-fg: #9c2b1e;
+  --error-border: #f3c4bb;
 
   --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
 
-  --radius-sm: 6px;
+  --radius-sm: 8px;
   --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-lg: 22px;
 
   --ease: cubic-bezier(0.22, 0.9, 0.24, 1);
-  --shadow-sm: 0 1px 2px rgba(20, 16, 8, 0.06), 0 1px 1px rgba(20, 16, 8, 0.04);
-  --shadow-md: 0 14px 34px -14px rgba(20, 16, 8, 0.22), 0 3px 10px rgba(20, 16, 8, 0.06);
-  --shadow-lg: 0 34px 80px -28px rgba(20, 16, 8, 0.3), 0 12px 28px -10px rgba(20, 16, 8, 0.12);
+  --shadow-sm: 0 1px 2px rgba(7, 16, 34, 0.07), 0 1px 1px rgba(7, 16, 34, 0.05);
+  --shadow-md: 0 14px 34px -14px rgba(7, 16, 34, 0.24), 0 3px 10px rgba(7, 16, 34, 0.08);
+  --shadow-lg: 0 34px 80px -28px rgba(7, 16, 34, 0.32), 0 12px 28px -10px rgba(7, 16, 34, 0.14);
 }
 
 * { box-sizing: border-box; }
@@ -68,7 +73,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-::selection { background: var(--flash-100); color: var(--ink-950); }
+::selection { background: var(--gold-100); color: var(--ink-950); }
 
 button { font-family: inherit; }
 
