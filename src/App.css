@@ -258,6 +258,7 @@
    Fields
    ================================================================== */
 .field { display: block; margin-bottom: 20px; }
+
 .field__label {
   display: block;
   font-size: 0.82rem;
@@ -265,13 +266,14 @@
   color: var(--ink-800);
   margin-bottom: 7px;
 }
+
 .field input[type='text'],
 .field select {
   width: 100%;
   padding: 13px 14px;
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--line-strong);
-  background: var(--paper-0);
+  background: #ffffff;
   color: var(--ink-950);
   color-scheme: light only;
   -webkit-appearance: none;
@@ -280,20 +282,25 @@
   font-family: var(--font-body);
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
+
 .field input[type='text']:focus,
 .field select:focus {
   outline: none;
   border-color: var(--navy-600);
   box-shadow: 0 0 0 3px var(--navy-100);
 }
-.field select option { background: var(--paper-0); color: var(--ink-950); }
+
+.field select option { 
+  background: #ffffff; 
+  color: var(--ink-950); 
+}
 
 .field input[type='text']:-webkit-autofill,
 .field input[type='text']:-webkit-autofill:hover,
 .field input[type='text']:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--ink-950);
-  -webkit-box-shadow: 0 0 0 1000px var(--paper-0) inset;
-  box-shadow: 0 0 0 1000px var(--paper-0) inset;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  box-shadow: 0 0 0 1000px #ffffff inset;
   transition: background-color 9999s ease-in-out 0s;
 }
 
