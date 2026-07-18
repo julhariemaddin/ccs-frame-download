@@ -42,7 +42,7 @@ export const DEFAULT_LAYOUT = {
 };
 
 export const FONT_STACKS = {
-  display: { stack: "'Fraunces', Georgia, serif", weight: 700 },
+  display: { stack: "'Space Grotesk', 'Inter', system-ui, sans-serif", weight: 700 },
   mono: { stack: "'JetBrains Mono', 'SFMono-Regular', Menlo, monospace", weight: 600 },
   sans: { stack: "'Inter', system-ui, -apple-system, sans-serif", weight: 600 },
 };

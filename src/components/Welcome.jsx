@@ -2,7 +2,7 @@ export default function Welcome({ onStart }) {
   return (
     <div className="welcome">
       <div className="welcome__card">
-        <p className="mono welcome__eyebrow">jrmsu · college of computing studies</p>
+        <p className="mono welcome__eyebrow">jrmsu · frame lab</p>
         <h1 className="welcome__title">Frame Generator</h1>
         <p className="welcome__lede">
           Pick a frame, add your name and program, drop in a photo, and walk away with a
@@ -14,7 +14,7 @@ export default function Welcome({ onStart }) {
           <a href="https://julhariemaddin.is-a.dev" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'gray' , fontWeight: 'bold'}}>
             Julharie Maddin-Gov
           </a>
-          <p>and the CCS Officers</p>
+          <p>and the Frame Lab crew</p>
         </div>
 
         <button className="btn btn--primary btn--lg" onClick={onStart}>

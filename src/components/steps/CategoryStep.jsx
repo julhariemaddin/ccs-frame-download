@@ -9,7 +9,7 @@ export default function CategoryStep({ categories, category, setCategory, onNext
       {error && <div className="banner banner--error">{error}</div>}
 
       {entries.length === 0 ? (
-        <p className="hint">No categories yet. Ask a CCS officer to add one.</p>
+        <p className="hint">No categories yet. Ask an admin to add one.</p>
       ) : (
         <div className="category-grid">
           {entries.map(([key, cfg]) => (

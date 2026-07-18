@@ -229,7 +229,7 @@ export default function App() {
   function handleDownload() {
     const dataUrl = renderOutput();
     const safeName = name.trim().replace(/\s+/g, '_') || 'frame';
-    const fileName = `${safeName}_JRMSU_CCS.png`;
+    const fileName = `${safeName}_JRMSU_Frame.png`;
     setOutputDataUrl(dataUrl);
     setOutputFileName(fileName);
     triggerDownload(dataUrl, fileName);
@@ -264,7 +264,7 @@ export default function App() {
     <div className="app">
       {step !== 'loading' && step !== 'welcome' && (
         <header className="app__header">
-          <p className="mono app__eyebrow">jrmsu · college of computing studies</p>
+          <p className="mono app__eyebrow">jrmsu · frame lab</p>
           <h1 className="app__title">Frame Generator</h1>
           <span className="mono app__ay">{currentAcademicYear()}</span>
           {showStepProgress && <StepProgress step={step} />}
@@ -346,8 +346,8 @@ export default function App() {
 
       {step !== 'loading' && step !== 'welcome' && (
         <footer className="app__footer mono">
-          <span>made for jrmsu ccs</span>
-          <span className="app__ack">Created by Julharie Maddin-Gov and the CCS Officers</span>
+          <span>made for jrmsu students</span>
+          <span className="app__ack">Created by Julharie Maddin-Gov and the Frame Lab crew</span>
         </footer>
       )}
     </div>

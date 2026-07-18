@@ -1,54 +1,58 @@
 /* ------------------------------------------------------------------
-   Design tokens — "Letterpress" system
-   A professional, light academic register: warm ivory paper, deep
-   ink-navy for authority, and a restrained foil-gold for the single
-   accent that marks selection and progress — like a wax seal on a
-   diploma, not a SaaS brand color.
-   Type: Fraunces (display serif, the plaque/certificate voice) +
-   Inter (body) + JetBrains Mono (frame code names, step numerals,
-   anything "system" — a nod to CCS/Java).
+   Design tokens — "Frame Lab" system
+
+   Concept: this app develops a printed photo, so the palette is a
+   darkroom's: warm paper stock, near-black pine ink, and a single
+   safelight-red accent — the actual red glow a darkroom is lit with
+   while prints come up, used here only for the one active thing on
+   screen (a selection, a live action).
+
+   Type: Space Grotesk (display — geometric, a little technical, fits
+   a CS-department tool) + Inter (body) + JetBrains Mono (frame
+   counters, filenames, anything "read out" like a camera's meta).
 ------------------------------------------------------------------- */
 :root {
-  /* ink */
-  --ink-950: #12182a;
-  --ink-800: #1c2740;
-  --ink-600: #3a4864;
-  --ink-400: #6b7690;
-  --ink-200: #a7afc0;
+  /* ink (deep pine, not navy/black) */
+  --ink-950: #141f1b;
+  --ink-800: #223229;
+  --ink-700: #33473c;
+  --ink-600: #52685c;
+  --ink-400: #869184;
+  --ink-200: #c3c7ba;
 
-  /* paper */
-  --paper-0: #fffefb;
-  --paper-1: #faf7f0;
-  --paper-2: #f2ede1;
-  --line: #e5ded0;
-  --line-strong: #d8cdb6;
+  /* paper (warm print stock) */
+  --paper-0: #fdfbf6;
+  --paper-1: #f5f0e4;
+  --paper-2: #ece3d0;
+  --line: #ded2b6;
+  --line-strong: #cbba93;
 
-  /* foil accent (single hero color) */
-  --gold-800: #7a5a22;
-  --gold-600: #a8792f;
-  --gold-500: #bd8b3e;
-  --gold-400: #d3a758;
-  --gold-100: #f6ecd8;
+  /* safelight red — the one accent */
+  --flash-800: #7c2c1d;
+  --flash-600: #c2412b;
+  --flash-500: #d6553b;
+  --flash-400: #e17a5f;
+  --flash-100: #fbe4dc;
 
   /* signal */
-  --ok: #3f6b45;
-  --ok-bg: #eaf3ea;
-  --error-bg: #fbecea;
-  --error-fg: #8a2f1f;
-  --error-border: #edbdae;
+  --ok: #3d6b45;
+  --ok-bg: #e9f2ea;
+  --error-bg: #fbeae6;
+  --error-fg: #8a2f1a;
+  --error-border: #e8bfae;
 
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
 
-  --radius-sm: 8px;
+  --radius-sm: 6px;
   --radius-md: 14px;
-  --radius-lg: 22px;
+  --radius-lg: 20px;
 
   --ease: cubic-bezier(0.22, 0.9, 0.24, 1);
-  --shadow-sm: 0 1px 2px rgba(28, 22, 8, 0.05), 0 1px 1px rgba(28, 22, 8, 0.04);
-  --shadow-md: 0 10px 30px -12px rgba(28, 22, 8, 0.18), 0 2px 8px rgba(28, 22, 8, 0.05);
-  --shadow-lg: 0 30px 70px -24px rgba(28, 22, 8, 0.28), 0 10px 24px -8px rgba(28, 22, 8, 0.1);
+  --shadow-sm: 0 1px 2px rgba(20, 16, 8, 0.06), 0 1px 1px rgba(20, 16, 8, 0.04);
+  --shadow-md: 0 14px 34px -14px rgba(20, 16, 8, 0.22), 0 3px 10px rgba(20, 16, 8, 0.06);
+  --shadow-lg: 0 34px 80px -28px rgba(20, 16, 8, 0.3), 0 12px 28px -10px rgba(20, 16, 8, 0.12);
 }
 
 * { box-sizing: border-box; }
@@ -64,7 +68,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-::selection { background: var(--gold-100); color: var(--ink-950); }
+::selection { background: var(--flash-100); color: var(--ink-950); }
 
 button { font-family: inherit; }
 

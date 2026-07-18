@@ -101,8 +101,8 @@ export default function AdminDashboard({ onSignOut }) {
     <div className="admin">
       <header className="admin__header">
         <div>
-          <p className="mono admin__eyebrow">jrmsu · ccs · admin</p>
-          <h1 className="admin__title">Officer Dashboard</h1>
+          <p className="mono admin__eyebrow">jrmsu · frame lab · admin</p>
+          <h1 className="admin__title">Admin Dashboard</h1>
           <p className="admin__subtitle mono">{currentAcademicYear()}</p>
         </div>
         <div className="admin__header-actions">
