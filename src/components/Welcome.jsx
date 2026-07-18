@@ -1,9 +1,16 @@
+import Footer from './Footer';
+
+const BASE = import.meta.env.BASE_URL;
+
 export default function Welcome({ onStart }) {
   return (
     <div className="welcome">
       <div className="welcome__card">
-        <span className="welcome__mark" aria-hidden="true" />
-        <p className="welcome__eyebrow">JRMSU · College of Computing Studies</p>
+        <div className="welcome__logos">
+          <img src={`${BASE}branding/jrmsu-logo.png`} alt="JRMSU seal" />
+          <img src={`${BASE}branding/ccs-logo.png`} alt="College of Computer Studies logo" />
+        </div>
+        <p className="welcome__eyebrow">JRMSU · College of Computer Studies</p>
         <h1 className="welcome__title">Frame Lab</h1>
         <p className="welcome__lede">
           Pick a frame, add your name and program, drop in a photo, and walk away with a
@@ -19,15 +26,9 @@ export default function Welcome({ onStart }) {
         <button className="btn btn--primary btn--lg" onClick={onStart}>
           Get started
         </button>
-
-        <p className="welcome__ack">
-          Built by{' '}
-          <a href="https://julhariemaddin.is-a.dev" target="_blank" rel="noopener noreferrer">
-            Julharie Maddin-Gov
-          </a>{' '}
-          and the Frame Lab crew
-        </p>
       </div>
+
+      <Footer />
     </div>
   );
 }

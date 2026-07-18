@@ -7,6 +7,7 @@ import { loadLiveLayouts, getLiveFrameLayout } from './lib/liveLayouts';
 import LoadingScreen from './components/LoadingScreen';
 import Welcome from './components/Welcome';
 import Rail from './components/Rail';
+import Footer from './components/Footer';
 import CategoryStep from './components/steps/CategoryStep';
 import FrameStep from './components/steps/FrameStep';
 import DetailsStep from './components/steps/DetailsStep';
@@ -264,80 +265,83 @@ export default function App() {
       {step === 'welcome' && <Welcome onStart={handleStart} />}
 
       {!isBleedScreen && (
-        <div className="shell">
-          <Rail step={step} showSteps={showStepProgress} academicYear={currentAcademicYear()} />
+        <div className="shell-wrap">
+          <div className="shell">
+            <Rail step={step} showSteps={showStepProgress} academicYear={currentAcademicYear()} />
 
-          <main className="shell__main">
-            {step === 'category' && (
-              <CategoryStep
-                categories={categories}
-                category={category}
-                setCategory={setCategory}
-                onNext={() => setStep('frame')}
-                error={error}
-              />
-            )}
+            <main className="shell__main">
+              {step === 'category' && (
+                <CategoryStep
+                  categories={categories}
+                  category={category}
+                  setCategory={setCategory}
+                  onNext={() => setStep('frame')}
+                  error={error}
+                />
+              )}
 
-            {step === 'frame' && (
-              <FrameStep
-                frames={config.frames.map((f) => ({ ...f, folder: config.folder }))}
-                selectedFrameId={selectedFrame?.id}
-                onSelectFrame={handleSelectFrame}
-                categoryLabel={config.label}
-                onBack={() => setStep('category')}
-                onNext={() => setStep('details')}
-              />
-            )}
+              {step === 'frame' && (
+                <FrameStep
+                  frames={config.frames.map((f) => ({ ...f, folder: config.folder }))}
+                  selectedFrameId={selectedFrame?.id}
+                  onSelectFrame={handleSelectFrame}
+                  categoryLabel={config.label}
+                  onBack={() => setStep('category')}
+                  onNext={() => setStep('details')}
+                />
+              )}
 
-            {step === 'details' && (
-              <DetailsStep
-                name={name}
-                setName={setName}
-                program={program}
-                setProgram={setProgram}
-                programOptions={programOptions}
-                allowFreeTextProgram={!config.listFile}
-                onPhotoFile={handlePhotoFile}
-                hasPhoto={!!photoImg}
-                photoPreviewUrl={photoImg?.src || null}
-                onBack={() => setStep('frame')}
-                onNext={() => setStep('adjust')}
-              />
-            )}
+              {step === 'details' && (
+                <DetailsStep
+                  name={name}
+                  setName={setName}
+                  program={program}
+                  setProgram={setProgram}
+                  programOptions={programOptions}
+                  allowFreeTextProgram={!config.listFile}
+                  onPhotoFile={handlePhotoFile}
+                  hasPhoto={!!photoImg}
+                  photoPreviewUrl={photoImg?.src || null}
+                  onBack={() => setStep('frame')}
+                  onNext={() => setStep('adjust')}
+                />
+              )}
 
-            {step === 'adjust' && (
-              <AdjustStep
-                frameImg={frameImg}
-                geometry={geometry}
-                photoImg={photoImg}
-                photoState={photoState}
-                setPhotoState={setPhotoState}
-                textState={textState}
-                setTextState={setTextState}
-                name={name}
-                program={program}
-                layout={layout}
-                zoom={Math.round(photoState.scale * 100)}
-                setZoom={setZoom}
-                rotation={photoState.rotation}
-                setRotation={setRotation}
-                filter={photoState.filter}
-                setFilter={setFilter}
-                onBack={() => setStep('details')}
-                onDownload={handleDownload}
-                error={error}
-              />
-            )}
+              {step === 'adjust' && (
+                <AdjustStep
+                  frameImg={frameImg}
+                  geometry={geometry}
+                  photoImg={photoImg}
+                  photoState={photoState}
+                  setPhotoState={setPhotoState}
+                  textState={textState}
+                  setTextState={setTextState}
+                  name={name}
+                  program={program}
+                  layout={layout}
+                  zoom={Math.round(photoState.scale * 100)}
+                  setZoom={setZoom}
+                  rotation={photoState.rotation}
+                  setRotation={setRotation}
+                  filter={photoState.filter}
+                  setFilter={setFilter}
+                  onBack={() => setStep('details')}
+                  onDownload={handleDownload}
+                  error={error}
+                />
+              )}
 
-            {step === 'done' && (
-              <SuccessStep
-                outputDataUrl={outputDataUrl}
-                fileName={outputFileName}
-                onDownloadAgain={handleDownloadAgain}
-                onCreateAnother={handleCreateAnother}
-              />
-            )}
-          </main>
+              {step === 'done' && (
+                <SuccessStep
+                  outputDataUrl={outputDataUrl}
+                  fileName={outputFileName}
+                  onDownloadAgain={handleDownloadAgain}
+                  onCreateAnother={handleCreateAnother}
+                />
+              )}
+            </main>
+          </div>
+          <Footer />
         </div>
       )}
     </div>

@@ -29,8 +29,14 @@
 }
 .app--bleed { min-height: 100vh; }
 
-.shell {
+.shell-wrap {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell {
+  flex: 1;
   display: grid;
   grid-template-columns: 272px 1fr;
 }
@@ -54,14 +60,12 @@
   height: 100vh;
   overflow-y: auto;
 }
-.rail__brand { display: flex; align-items: center; gap: 12px; }
-.rail__mark {
+.rail__brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rail__logo {
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 .rail__brand-text { min-width: 0; }
 .rail__uni {
@@ -99,19 +103,6 @@
 }
 .rail__nav { flex: 0 0 auto; }
 .rail__spacer { flex: 1; }
-.rail__footer { border-top: 1px solid rgba(255, 255, 255, 0.14); padding-top: 16px; }
-.rail__footer-line {
-  margin: 0 0 4px;
-  font-size: 0.76rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-.rail__footer-line--muted { color: rgba(255, 255, 255, 0.42); }
-.rail__footer-line a {
-  color: var(--gold-400);
-  text-decoration: none;
-  font-weight: 600;
-}
-.rail__footer-line a:hover { text-decoration: underline; }
 
 /* ---------- vertical step tracker ---------- */
 .step-progress {
@@ -649,6 +640,7 @@
   min-height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 24px;
@@ -670,13 +662,17 @@
   box-shadow: var(--shadow-lg);
   animation: rise-in 0.55s var(--ease) both;
 }
-.welcome__mark {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--gold-400), var(--gold-600));
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4), var(--shadow-sm);
+.welcome__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.welcome__logos img {
+  height: 74px;
+  width: auto;
+  filter: drop-shadow(0 4px 10px rgba(7, 16, 34, 0.18));
 }
 .welcome__eyebrow {
   color: var(--navy-700);
@@ -730,17 +726,26 @@
   border-radius: 50%;
   background: var(--gold-500);
 }
-.welcome__ack {
-  margin: 22px 0 0;
-  color: var(--ink-400);
-  font-size: 0.85rem;
+
+/* ==================================================================
+   Site footer — always visible, on every screen (welcome + wizard)
+   ================================================================== */
+.site-footer {
+  text-align: center;
+  padding: 22px 20px 30px;
 }
-.welcome__ack a {
+.site-footer__line {
+  margin: 0 0 4px;
+  font-size: 0.8rem;
+  color: var(--ink-600);
+}
+.site-footer__line--muted { color: var(--ink-400); font-size: 0.75rem; }
+.site-footer__line a {
   color: var(--navy-700);
   font-weight: 700;
   text-decoration: none;
 }
-.welcome__ack a:hover { text-decoration: underline; }
+.site-footer__line a:hover { text-decoration: underline; }
 
 /* ==================================================================
    Responsive — rail collapses into a top bar, actions become a
@@ -759,11 +764,12 @@
     padding: 14px 18px;
     overflow: visible;
   }
-  .rail__brand { flex: 1 1 auto; }
+  .rail__brand { flex: 1 1 auto; gap: 8px; }
+  .rail__logo { height: 28px; }
   .rail__dept { display: none; }
   .rail__product { display: none; }
   .rail__nav { flex: 0 0 auto; }
-  .rail__spacer, .rail__footer { display: none; }
+  .rail__spacer { display: none; }
 
   .step-progress { flex-direction: row; gap: 0; }
   .step-progress__item { padding: 0 3px; }
@@ -800,4 +806,6 @@
     background: none;
   }
   .btn--lg { width: 100%; }
+  .welcome__logos img { height: 58px; }
+  .welcome__card { padding: 40px 26px 34px; }
 }

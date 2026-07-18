@@ -1,13 +1,16 @@
 import StepProgress from './StepProgress';
 
+const BASE = import.meta.env.BASE_URL;
+
 export default function Rail({ step, showSteps, academicYear }) {
   return (
     <aside className="rail">
       <div className="rail__brand">
-        <span className="rail__mark" aria-hidden="true" />
+        <img className="rail__logo" src={`${BASE}branding/jrmsu-logo.png`} alt="JRMSU seal" />
+        <img className="rail__logo" src={`${BASE}branding/ccs-logo.png`} alt="College of Computer Studies logo" />
         <div className="rail__brand-text">
           <p className="rail__uni">JRMSU</p>
-          <p className="rail__dept">College of Computing Studies</p>
+          <p className="rail__dept">College of Computer Studies</p>
         </div>
       </div>
 
@@ -23,16 +26,6 @@ export default function Rail({ step, showSteps, academicYear }) {
       )}
 
       <div className="rail__spacer" />
-
-      <div className="rail__footer">
-        <p className="rail__footer-line">
-          Built by{' '}
-          <a href="https://julhariemaddin.is-a.dev" target="_blank" rel="noopener noreferrer">
-            Julharie Maddin-Gov
-          </a>
-        </p>
-        <p className="rail__footer-line rail__footer-line--muted">and the Frame Lab crew</p>
-      </div>
     </aside>
   );
 }

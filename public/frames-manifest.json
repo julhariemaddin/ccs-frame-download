@@ -1,4 +1,21 @@
 {
+  "branding": {
+    "label": "Branding",
+    "folder": "branding",
+    "hasList": false,
+    "frames": [
+      {
+        "id": "ccs-logo",
+        "file": "ccs-logo.png",
+        "label": "Ccs Logo"
+      },
+      {
+        "id": "jrmsu-logo",
+        "file": "jrmsu-logo.png",
+        "label": "Jrmsu Logo"
+      }
+    ]
+  },
   "program": {
     "label": "Program",
     "folder": "program",
