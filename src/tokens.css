@@ -1,37 +1,54 @@
 /* ------------------------------------------------------------------
-   Design tokens
-   Palette is drawn from the frame artwork itself (deep plum + brass)
-   but pushed away from a flat "SaaS purple" toward something closer
-   to an engraved plaque: warm parchment paper, oxidised brass, ink.
-   Type: Fraunces (display serif, plaque/certificate feel) + Inter
-   (body) + JetBrains Mono (the frames are wallpapered in Java code —
-   mono is used for anything technical: labels, step numbers, meta).
+   Design tokens — "Letterpress" system
+   A professional, light academic register: warm ivory paper, deep
+   ink-navy for authority, and a restrained foil-gold for the single
+   accent that marks selection and progress — like a wax seal on a
+   diploma, not a SaaS brand color.
+   Type: Fraunces (display serif, the plaque/certificate voice) +
+   Inter (body) + JetBrains Mono (frame code names, step numerals,
+   anything "system" — a nod to CCS/Java).
 ------------------------------------------------------------------- */
 :root {
-  --ink: #1c1220;
-  --plum-950: #1f1029;
-  --plum-900: #2a1533;
-  --plum-800: #3a1e42;
-  --plum-700: #4d2a55;
-  --brass-900: #7a5220;
-  --brass-700: #a9762b;
-  --brass-500: #c99a45;
-  --brass-300: #e2c184;
-  --parchment: #f2ead9;
-  --parchment-dim: #e8dec7;
-  --paper: #faf6ec;
-  --paper-line: #ded2b4;
-  --ok: #5c7a4f;
-  --error-bg: #3a1414;
-  --error-fg: #f2c7b8;
-  --error-border: #7a3a2a;
+  /* ink */
+  --ink-950: #12182a;
+  --ink-800: #1c2740;
+  --ink-600: #3a4864;
+  --ink-400: #6b7690;
+  --ink-200: #a7afc0;
+
+  /* paper */
+  --paper-0: #fffefb;
+  --paper-1: #faf7f0;
+  --paper-2: #f2ede1;
+  --line: #e5ded0;
+  --line-strong: #d8cdb6;
+
+  /* foil accent (single hero color) */
+  --gold-800: #7a5a22;
+  --gold-600: #a8792f;
+  --gold-500: #bd8b3e;
+  --gold-400: #d3a758;
+  --gold-100: #f6ecd8;
+
+  /* signal */
+  --ok: #3f6b45;
+  --ok-bg: #eaf3ea;
+  --error-bg: #fbecea;
+  --error-fg: #8a2f1f;
+  --error-border: #edbdae;
 
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
 
-  --radius-sm: 4px;
-  --radius-md: 10px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  --ease: cubic-bezier(0.22, 0.9, 0.24, 1);
+  --shadow-sm: 0 1px 2px rgba(28, 22, 8, 0.05), 0 1px 1px rgba(28, 22, 8, 0.04);
+  --shadow-md: 0 10px 30px -12px rgba(28, 22, 8, 0.18), 0 2px 8px rgba(28, 22, 8, 0.05);
+  --shadow-lg: 0 30px 70px -24px rgba(28, 22, 8, 0.28), 0 10px 24px -8px rgba(28, 22, 8, 0.1);
 }
 
 * { box-sizing: border-box; }
@@ -40,12 +57,22 @@ html, body, #root { height: 100%; }
 
 body {
   margin: 0;
-  background: var(--plum-950);
-  color: var(--ink);
+  background: var(--paper-1);
+  color: var(--ink-800);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-::selection { background: var(--brass-500); color: var(--plum-950); }
+::selection { background: var(--gold-100); color: var(--ink-950); }
 
 button { font-family: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
