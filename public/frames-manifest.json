@@ -1,0 +1,24 @@
+{
+  "program": {
+    "label": "Program",
+    "folder": "program",
+    "hasList": true,
+    "frames": [
+      {
+        "id": "frame-1",
+        "file": "frame-1.png",
+        "label": "FRAME 1"
+      },
+      {
+        "id": "frame-2",
+        "file": "frame-2.png",
+        "label": "FRAME 2"
+      },
+      {
+        "id": "FRAME-3",
+        "file": "FRAME-3.png",
+        "label": "FRAME 3"
+      }
+    ]
+  }
+}

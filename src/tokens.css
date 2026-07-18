@@ -1,0 +1,51 @@
+/* ------------------------------------------------------------------
+   Design tokens
+   Palette is drawn from the frame artwork itself (deep plum + brass)
+   but pushed away from a flat "SaaS purple" toward something closer
+   to an engraved plaque: warm parchment paper, oxidised brass, ink.
+   Type: Fraunces (display serif, plaque/certificate feel) + Inter
+   (body) + JetBrains Mono (the frames are wallpapered in Java code —
+   mono is used for anything technical: labels, step numbers, meta).
+------------------------------------------------------------------- */
+:root {
+  --ink: #1c1220;
+  --plum-950: #1f1029;
+  --plum-900: #2a1533;
+  --plum-800: #3a1e42;
+  --plum-700: #4d2a55;
+  --brass-900: #7a5220;
+  --brass-700: #a9762b;
+  --brass-500: #c99a45;
+  --brass-300: #e2c184;
+  --parchment: #f2ead9;
+  --parchment-dim: #e8dec7;
+  --paper: #faf6ec;
+  --paper-line: #ded2b4;
+  --ok: #5c7a4f;
+  --error-bg: #3a1414;
+  --error-fg: #f2c7b8;
+  --error-border: #7a3a2a;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--plum-950);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--brass-500); color: var(--plum-950); }
+
+button { font-family: inherit; }
